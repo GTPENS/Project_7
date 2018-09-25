@@ -66,6 +66,9 @@ public class Unit : MonoBehaviour {
     public void init(int _id)
     {
         Id = _id;
+        HealthPoint = 100;
+        CurrentHealthPoint = HealthPoint;
+        Damage = 20;
         animator = this.gameObject.GetComponent<Animator>();
         animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character"+Id.ToString(), typeof(RuntimeAnimatorController));
     }
