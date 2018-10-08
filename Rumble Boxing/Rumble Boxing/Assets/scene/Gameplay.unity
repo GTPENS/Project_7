@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &20799099 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1526306161524280, guid: 0aef640afa57c474c8be28fabd079979,
+    type: 2}
+  m_PrefabInternal: {fileID: 710073366}
 --- !u!1 &31317098 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1526306161524280, guid: 0aef640afa57c474c8be28fabd079979,
@@ -2717,7 +2722,7 @@ MonoBehaviour:
   questManager: {fileID: 1256080958}
   uiManager: {fileID: 1712244928}
   player: {fileID: 31317098}
-  enemy: {fileID: 0}
+  enemy: {fileID: 20799099}
 --- !u!1 &1712244928
 GameObject:
   m_ObjectHideFlags: 0

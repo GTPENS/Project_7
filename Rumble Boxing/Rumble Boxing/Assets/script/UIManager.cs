@@ -11,9 +11,6 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private Text round_txt;
     [SerializeField] private Image timerBar;
     [SerializeField] private List<GameObject> listOfButtonAnimation = new List<GameObject>();
-	void Start () {
-
-	}
 
     public void playButtonAnimation(int _idButton)
     {
@@ -24,14 +21,20 @@ public class UIManager : MonoBehaviour {
     {
         timerBar.fillAmount = _fillAmount;
     }
+
+    public void updatePlayerBar(float _fillAmount)
+    {
+        playerBar.fillAmount = _fillAmount;
+    }
+
+    public void updateEnemyBar(float _fillAmount)
+    {
+        enemmyBar.fillAmount = _fillAmount;
+    }
+
+
+
     // Update is called once per frame
-    float a = 1;
-    int round = 0;
-	void Update () {
-        //a -= 0.01f;
-        //round++;
-        //playerBar.fillAmount = a;
-        //enemmyBar.fillAmount = a;
-        //round_txt.text = "Round "+round.ToString();
+    void Update () {
 	}
 }

@@ -15,11 +15,10 @@ public class GameManager : MonoBehaviour {
     private float defaultTimer;
     private float currentBarTimer;
     private float timerSpeed;
+
 	void Start () {
         initDataDefault();
         generateNewQuest();
-        
-        
     }
 
     private void initDataDefault()
@@ -27,12 +26,20 @@ public class GameManager : MonoBehaviour {
         defaultTimer = 2;
         currentBarTimer = defaultTimer;
         timerSpeed = 0.01f;
+        initDataPlayer();
+    }
+
+    private void initDataPlayer()
+    {
+        getPlayer().init(1, false);
+        getEnemy().init(2, true);
     }
 
     private void generateNewQuest()
     {
         questManager.gameObject.GetComponent<QuestManager>().generateQuest();
         listOfAnswer = new List<int>();
+        currentBarTimer = defaultTimer;
     }
     
 
@@ -62,14 +69,28 @@ public class GameManager : MonoBehaviour {
 
     private void enemyPunch()
     {
-        enemy.gameObject.GetComponent<Animator>().SetTrigger("punch");
-        player.gameObject.GetComponent<Animator>().SetTrigger("hit");
+        int damage = getEnemy().Damage;
+        getEnemy().attack();
+        getPlayer().getHit(damage);
+        getUIManager().updatePlayerBar((float)getPlayer().CurrentHealthPoint / getPlayer().HealthPoint);
     }
 
     private void playerPunch()
     {
-        player.gameObject.GetComponent<Animator>().SetTrigger("punch");
-        enemy.gameObject.GetComponent<Animator>().SetTrigger("hit");
+        getPlayer().attack();
+        int damage = getPlayer().Damage;
+        getEnemy().getHit(damage);
+        getUIManager().updateEnemyBar((float)getEnemy().CurrentHealthPoint / getEnemy().HealthPoint);
+    }
+
+    private Unit getPlayer()
+    {
+        return player.gameObject.GetComponent<Unit>();
+    }
+
+    private Unit getEnemy()
+    {
+        return enemy.gameObject.GetComponent<Unit>();
     }
 
     private UIManager getUIManager()
@@ -80,12 +101,11 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         currentBarTimer -= timerSpeed;
-        getUIManager().updateTimerBar(currentBarTimer/defaultTimer);
         if(currentBarTimer <= 0)
         {
-            currentBarTimer = defaultTimer;
             enemyPunch();
             generateNewQuest();
         }
-	}
+        getUIManager().updateTimerBar(currentBarTimer / defaultTimer);
+    }
 }
