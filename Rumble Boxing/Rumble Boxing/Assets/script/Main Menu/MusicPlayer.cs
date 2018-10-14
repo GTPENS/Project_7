@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicManager : MonoBehaviour {
+public class MusicPlayer : MonoBehaviour {
 
     private AudioSource audioscr;
     private float musicVol = 1;
@@ -14,7 +14,9 @@ public class MusicManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        
         audioscr.volume = musicVol;
+        
     }
 
     public void SetVol(float vol)

@@ -6,28 +6,45 @@ using DG.Tweening;
 
 public class MenuManager : MonoBehaviour {
 
+    [SerializeField] private GameObject tittle;
+    [SerializeField] private GameObject char1;
+    [SerializeField] private GameObject char2;
+    [SerializeField] private GameObject PlayButton;
+    [SerializeField] private GameObject OptionButton;
+    [SerializeField] private GameObject QuitMenu;
 
-	// Use this for initialization
-	void Start () {
-       
-		if(gameObject.tag == "mainmenu")
-        {
-            transform.DOMoveY(3,1);
-            if (Input.GetKeyDown("space"))
-            {
-                transform.DOShakePosition(5, 15, 1);
-            }
-        }
-        if(gameObject.tag == "obj1")
-        {
-            transform.DOShakeRotation(2,10,1);
-        }
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Use this for initialization
+    void Start () {
         
-	}
+        tittle.transform.DOMoveY(3, 4).OnComplete(charMove);
+        menuMove();
+        
+    }
 
+    private void charMove()
+    {
+        char1.transform.DOMoveX(1.5f, 4);
+        char2.transform.DOMoveX(-1.5f, 4);
+        char1.transform.DOShakeRotation(2, 10, 1);
+        char2.transform.DOShakeRotation(2, 10, 1);
+    }
+
+    private void menuMove()
+    {
+        PlayButton.transform.DOMoveX(79, 2);
+        OptionButton.transform.DOMoveX(79, 2);
+        QuitMenu.transform.DOMoveX(79, 2);
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
     
+    public void EqitGame()
+    {
+        Debug.Log("berhasil");
+        Application.Quit();
+    }
 }
