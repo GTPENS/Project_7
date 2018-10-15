@@ -103,6 +103,7 @@ public class Unit : MonoBehaviour {
         Damage = 20;
         IsDead = false;
         animator = GetComponent<Animator>();
+        animator.enabled = true;
         animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character"+Id.ToString(), typeof(RuntimeAnimatorController));
         setWalk();
     }
@@ -143,7 +144,6 @@ public class Unit : MonoBehaviour {
     private void generateNewEnemyModel()
     {
         //int idEnemy = UnityEngine.Random.Range(11, 15);
-        IsDead = false;
         init(2, true);
     }
 
@@ -160,15 +160,16 @@ public class Unit : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-		if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length && 
+		if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.1f && 
             animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&
             IsDead)
         {
+            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + " - " + animator.GetCurrentAnimatorStateInfo(0).length);
             IsDead = false;
             animator.enabled = false;
             if (isEnemy)
             {
-                generateNewEnemyModel();
+                pullOutKoEnemy();
             }
             else
             {
@@ -176,4 +177,9 @@ public class Unit : MonoBehaviour {
             }
         }
 	}
+
+    private void pullOutKoEnemy()
+    {
+        transform.DOMove(new Vector3(5, 0.8f, 90), 1.5f).SetEase(Ease.Linear).OnComplete(generateNewEnemyModel);
+    }
 }
