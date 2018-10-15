@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -10,18 +11,32 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject questManager;
     [SerializeField] private GameObject uiManager;
     [SerializeField] private GameObject unit;
+    [SerializeField] private Animator animationStartGame;
+    [SerializeField] private GameObject startGameCanvas;
+    [SerializeField] private GameObject questHandler;
+    private Animator animatorStartGame;
+
     private List<int> listOfAnswer = new List<int>();
     private float defaultTimer;
     private float currentBarTimer;
     private float timerSpeed;
+    private bool isBattleReady;
 
 	void Start () {
         initDataDefault();
-        generateNewQuest();
+        questHandler.SetActive(false);
+        startGameCanvas.SetActive(false);
+        DOVirtual.DelayedCall(3, startGame);
+    }
+
+    private void startGame()
+    {
+        startGameCanvas.SetActive(true);
     }
 
     private void initDataDefault()
     {
+        isBattleReady = false;
         defaultTimer = 2;
         currentBarTimer = defaultTimer;
         timerSpeed = 0.01f;
@@ -36,6 +51,8 @@ public class GameManager : MonoBehaviour {
 
     private void generateNewQuest()
     {
+        
+        questHandler.SetActive(true);
         questManager.gameObject.GetComponent<QuestManager>().generateQuest();
         listOfAnswer = new List<int>();
         currentBarTimer = defaultTimer;
@@ -44,7 +61,10 @@ public class GameManager : MonoBehaviour {
 
     public void inputAnswer(int _idAnswer)
     {
-        Debug.Log(_idAnswer);
+        if (!isBattleReady)
+        {
+            return;
+        }
         if (listOfAnswer.Count < 4)
         {
             listOfAnswer.Add(_idAnswer);
@@ -116,12 +136,31 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        currentBarTimer -= timerSpeed;
-        if(currentBarTimer <= 0)
+        if(!isBattleReady &&
+            animationStartGame.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
         {
-            enemyPunch();
+            Debug.Log("isbattle ready");
+            isBattleReady = true;
+            hideAnimationStartGame();
             generateNewQuest();
         }
-        getUIManager().updateTimerBar(currentBarTimer / defaultTimer);
+        if (isBattleReady)
+        {
+            currentBarTimer -= timerSpeed;
+            if (currentBarTimer <= 0)
+            {
+                enemyPunch();
+                generateNewQuest();
+            }
+            getUIManager().updateTimerBar(currentBarTimer / defaultTimer);
+        }
+        
+    }
+
+    private void hideAnimationStartGame()
+    {
+        animationStartGame.GetComponent<Animator>().enabled = false;
+        animationStartGame.GetComponent<Animator>().Rebind();
+        startGameCanvas.SetActive(false);
     }
 }
