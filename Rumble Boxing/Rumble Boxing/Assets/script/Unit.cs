@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Unit : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class Unit : MonoBehaviour {
     private int healthPoint;
     private int currentHealthPoint;
     private bool isEnemy;
+    private bool isDead;
     private Animator animator;
 
     public int Id
@@ -78,15 +80,53 @@ public class Unit : MonoBehaviour {
         }
     }
 
+    public bool IsDead
+    {
+        get
+        {
+            return isDead;
+        }
+
+        set
+        {
+            isDead = value;
+        }
+    }
+
     public void init(int _id, bool _isEnemy)
     {
+        DOTween.Init();
         Id = _id;
         IsEnemy = _isEnemy;
         HealthPoint = 100;
         CurrentHealthPoint = HealthPoint;
         Damage = 20;
+        IsDead = false;
         animator = GetComponent<Animator>();
         animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character"+Id.ToString(), typeof(RuntimeAnimatorController));
+        setWalk();
+    }
+
+    private void setWalk()
+    {
+        animator.SetTrigger("walk");
+        Debug.Log(this.transform.position);
+        if (!IsEnemy)
+        {
+            this.transform.position = new Vector3(-4, 0.8f, 90);
+            this.transform.DOMove(new Vector3(-1.1f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setIdle);
+        }
+        else
+        {
+            this.transform.localScale = new Vector3(-0.7f, 0.7f, 0.7f);
+            this.transform.position = new Vector3(4, 0.8f, 90);
+            this.transform.DOMove(new Vector3(0.8f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setIdle);
+        }
+    }
+
+    private void setIdle()
+    {
+        animator.SetTrigger("idle");
     }
 
     public void getHit(int _damage)
@@ -95,23 +135,22 @@ public class Unit : MonoBehaviour {
         animator.SetTrigger("hit");
         if(CurrentHealthPoint <= 0)
         {
+            IsDead = true;
             setIsDead();
-            if (isEnemy)
-            {
-                generateNewEnemyModel();
-            }
         }
     }
 
     private void generateNewEnemyModel()
     {
         //int idEnemy = UnityEngine.Random.Range(11, 15);
+        IsDead = false;
         init(2, true);
     }
 
     private void setIsDead()
     {
         //animation death here
+        animator.SetTrigger("ko");
     }
 
     public void attack()
@@ -121,6 +160,20 @@ public class Unit : MonoBehaviour {
     }
 	// Update is called once per frame
 	void Update () {
-		
+		if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length && 
+            animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&
+            IsDead)
+        {
+            IsDead = false;
+            animator.enabled = false;
+            if (isEnemy)
+            {
+                generateNewEnemyModel();
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
+        }
 	}
 }

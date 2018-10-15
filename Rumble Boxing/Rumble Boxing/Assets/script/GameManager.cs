@@ -9,8 +9,7 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     [SerializeField] private GameObject questManager;
     [SerializeField] private GameObject uiManager;
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject unit;
     private List<int> listOfAnswer = new List<int>();
     private float defaultTimer;
     private float currentBarTimer;
@@ -31,8 +30,8 @@ public class GameManager : MonoBehaviour {
 
     private void initDataPlayer()
     {
-        getPlayer().init(1, false);
-        getEnemy().init(2, true);
+        attachUnit(1, false);
+        attachUnit(2, true);
     }
 
     private void generateNewQuest()
@@ -73,6 +72,10 @@ public class GameManager : MonoBehaviour {
         getEnemy().attack();
         getPlayer().getHit(damage);
         getUIManager().updatePlayerBar((float)getPlayer().CurrentHealthPoint / getPlayer().HealthPoint);
+        if (getPlayer().IsDead)
+        {
+            Debug.Log("game over");
+        }
     }
 
     private void playerPunch()
@@ -81,16 +84,29 @@ public class GameManager : MonoBehaviour {
         int damage = getPlayer().Damage;
         getEnemy().getHit(damage);
         getUIManager().updateEnemyBar((float)getEnemy().CurrentHealthPoint / getEnemy().HealthPoint);
+        if (getEnemy().IsDead)
+        {
+            Debug.Log("enemy dead, generate new enemy");
+        }
+    }
+
+
+    private List<GameObject> listOfUnit = new List<GameObject>();
+    private void attachUnit(int _id, bool _isEnemy)
+    {
+        GameObject go = Instantiate(unit);
+        listOfUnit.Add(go);
+        listOfUnit[listOfUnit.Count - 1].GetComponent<Unit>().init(_id, _isEnemy);
     }
 
     private Unit getPlayer()
     {
-        return player.gameObject.GetComponent<Unit>();
+        return listOfUnit[0].GetComponent<Unit>();
     }
 
     private Unit getEnemy()
     {
-        return enemy.gameObject.GetComponent<Unit>();
+        return listOfUnit[listOfUnit.Count - 1].GetComponent<Unit>();
     }
 
     private UIManager getUIManager()
