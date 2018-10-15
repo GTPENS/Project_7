@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour
+{
 
     // Use this for initialization
     private int id;
@@ -104,7 +105,7 @@ public class Unit : MonoBehaviour {
         IsDead = false;
         animator = GetComponent<Animator>();
         animator.enabled = true;
-        animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character"+Id.ToString(), typeof(RuntimeAnimatorController));
+        animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + Id.ToString(), typeof(RuntimeAnimatorController));
         setWalk();
     }
 
@@ -134,7 +135,7 @@ public class Unit : MonoBehaviour {
     {
         CurrentHealthPoint -= _damage;
         animator.SetTrigger("hit");
-        if(CurrentHealthPoint <= 0)
+        if (CurrentHealthPoint <= 0)
         {
             IsDead = true;
             setIsDead();
@@ -158,9 +159,10 @@ public class Unit : MonoBehaviour {
         //GetComponent<Animator>().SetTrigger("punch");
         animator.SetTrigger("punch");
     }
-	// Update is called once per frame
-	void Update () {
-		if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.1f && 
+    // Update is called once per frame
+    void Update()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.1f &&
             animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&
             IsDead)
         {
@@ -176,7 +178,7 @@ public class Unit : MonoBehaviour {
                 this.gameObject.SetActive(false);
             }
         }
-	}
+    }
 
     private void pullOutKoEnemy()
     {
