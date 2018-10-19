@@ -160,7 +160,7 @@ public class Unit : MonoBehaviour
         animator.SetTrigger("punch");
     }
     // Update is called once per frame
-    void Update()
+    public void update()
     {
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.1f &&
             animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&

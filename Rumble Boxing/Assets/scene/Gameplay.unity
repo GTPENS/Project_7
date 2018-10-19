@@ -2496,6 +2496,7 @@ MonoBehaviour:
   unit: {fileID: 1081166002295324, guid: 0f957763e7df5964cbe15eb3f5e3192d, type: 2}
   animationStartGame: {fileID: 2042154231}
   startGameCanvas: {fileID: 2071572495}
+  questHandler: {fileID: 505028927}
 --- !u!1 &1712244928
 GameObject:
   m_ObjectHideFlags: 0

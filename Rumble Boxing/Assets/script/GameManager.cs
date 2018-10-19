@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour {
 
     private void initDataPlayer()
     {
-        attachUnit(1, false);
+        attachUnit(GameplayDataManager.getInstance().IdEquipedUnit, false);
         attachUnit(2, true);
     }
 
@@ -129,6 +129,16 @@ public class GameManager : MonoBehaviour {
         return listOfUnit[listOfUnit.Count - 1].GetComponent<Unit>();
     }
 
+    private Unit getUnit(int _index)
+    {
+        return listOfUnit[_index].GetComponent<Unit>();
+    }
+
+    private int getNumberOfUnits()
+    {
+        return listOfUnit.Count;
+    }
+
     private UIManager getUIManager()
     {
         return uiManager.gameObject.GetComponent<UIManager>();
@@ -154,7 +164,16 @@ public class GameManager : MonoBehaviour {
             }
             getUIManager().updateTimerBar(currentBarTimer / defaultTimer);
         }
+        updateUnit();
         
+    }
+
+    private void updateUnit()
+    {
+        for (int i = 0; i < getNumberOfUnits(); i++)
+        {
+            getUnit(i).update();
+        }
     }
 
     private void hideAnimationStartGame()
