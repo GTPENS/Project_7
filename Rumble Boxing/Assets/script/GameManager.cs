@@ -45,17 +45,22 @@ public class GameManager : MonoBehaviour {
 
     private void initDataPlayer()
     {
-        attachUnit(GameplayDataManager.getInstance().IdEquipedUnit, false);
+        attachUnit(1, false);
         attachUnit(2, true);
     }
 
     private void generateNewQuest()
     {
-        
+        getUIManager().resetFilledQuest();
         questHandler.SetActive(true);
         questManager.gameObject.GetComponent<QuestManager>().generateQuest();
         listOfAnswer = new List<int>();
         currentBarTimer = defaultTimer;
+    }
+
+    private void battleReady()
+    {
+        
     }
     
 
@@ -68,6 +73,7 @@ public class GameManager : MonoBehaviour {
         if (listOfAnswer.Count < 4)
         {
             listOfAnswer.Add(_idAnswer);
+            getUIManager().showFilledQuest(listOfAnswer.Count);
             if(listOfAnswer.Count == 4)
             {
                 if (questManager.gameObject.GetComponent<QuestManager>().checkAnswer(listOfAnswer))
@@ -81,7 +87,6 @@ public class GameManager : MonoBehaviour {
                     enemyPunch();
                 }
                 generateNewQuest();
-
             }
         }
     }

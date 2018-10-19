@@ -156,13 +156,12 @@ public class Unit : MonoBehaviour
 
     public void attack()
     {
-        //GetComponent<Animator>().SetTrigger("punch");
         animator.SetTrigger("punch");
     }
     // Update is called once per frame
     public void update()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.1f &&
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.2f &&
             animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&
             IsDead)
         {

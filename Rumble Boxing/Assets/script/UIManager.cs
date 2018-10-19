@@ -11,10 +11,26 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private Text round_txt;
     [SerializeField] private Image timerBar;
     [SerializeField] private List<GameObject> listOfButtonAnimation = new List<GameObject>();
+    [SerializeField] private List<GameObject> listOfFilledQuestAnimation = new List<GameObject>();
+    [SerializeField] private List<GameObject> listOfFilledQuest = new List<GameObject>();
 
     public void playButtonAnimation(int _idButton)
     {
         listOfButtonAnimation[_idButton - 1].gameObject.GetComponent<Animator>().SetTrigger("isClick");
+    }
+
+    public void showFilledQuest(int _idSingleQuest)
+    {
+        listOfFilledQuestAnimation[_idSingleQuest - 1].gameObject.GetComponent<Animator>().SetTrigger("isFilled");
+        listOfFilledQuest[_idSingleQuest - 1].gameObject.SetActive(true);
+    }
+
+    public void resetFilledQuest()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            listOfFilledQuest[i].gameObject.SetActive(false);
+        }
     }
 
     public void updateTimerBar(float _fillAmount)
