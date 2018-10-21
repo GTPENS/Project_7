@@ -21,13 +21,14 @@ public class GameManager : MonoBehaviour {
     private float currentBarTimer;
     private float timerSpeed;
     private bool isBattleReady;
+    private int unitReadyCounter;
 
 	void Start () {
+        unitReadyCounter = 0;
         initDataDefault();
         attachUnitBase();
         questHandler.SetActive(false);
         startGameCanvas.SetActive(false);
-        DOVirtual.DelayedCall(3, initStartGameBanner);
     }
 
     private void initStartGameBanner()
@@ -39,8 +40,8 @@ public class GameManager : MonoBehaviour {
     private void startGame()
     {
         hideAnimationStartGame();
-        isBattleReady = true;
         questHandler.SetActive(true);
+        isBattleReady = true;
         generateNewQuest();
     }
 
@@ -126,14 +127,29 @@ public class GameManager : MonoBehaviour {
         go.GetComponent<Unit>().EVENT_UNIT_READY += onUnitReady;
         listOfUnit.Add(go.GetComponent<Unit>());
         listOfUnit[listOfUnit.Count - 1].GetComponent<Unit>().init(_id, _isEnemy);
+        getUIManager().updateEnemyBar((float)getEnemy().CurrentHealthPoint / getEnemy().HealthPoint);
     }
 
     private void onUnitReady(object sender, EventArgs e)
     {
         initDataDefault();
-        getUIManager().updateEnemyBar(((GameObject)sender).GetComponent<Unit>().CurrentHealthPoint/ ((GameObject)sender).GetComponent<Unit>().HealthPoint);
-        isBattleReady = true;
-        generateNewQuest();
+        unitReadyCounter++;
+        Debug.Log("ready " + unitReadyCounter);
+        if(unitReadyCounter == 1)
+        {
+            initStartGameBanner();
+        }
+        else if(unitReadyCounter == 2)
+        {
+            isBattleReady = true;
+            generateNewQuest();
+        }else if(unitReadyCounter >= 3)
+        {
+            unitReadyCounter = 2;
+            questHandler.SetActive(true);
+            isBattleReady = true;
+            generateNewQuest();
+        }
     }
 
     private void onUnitDeath(object _sender, EventArgs e)
@@ -143,7 +159,9 @@ public class GameManager : MonoBehaviour {
         sender.GetComponent<Unit>().EVENT_UNIT_DEATH -= onUnitDeath;
         Destroy(sender);
         isBattleReady = false;
+        questHandler.SetActive(false);
         attachUnit(2, true);
+        //unitReadyCounter--;
     }
 
     private Unit getPlayer()

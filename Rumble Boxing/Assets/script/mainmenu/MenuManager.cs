@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using System;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
 
@@ -13,6 +14,8 @@ public class MenuManager : MonoBehaviour {
     [SerializeField] private GameObject btnPlay;
     [SerializeField] private GameObject btnOptions;
     [SerializeField] private GameObject btnExit;
+    [SerializeField] private GameObject canvasLoadingScreen;
+    [SerializeField] private Slider sliderBarLoading;
 
     private Vector3 tittleDefaultPos;
     private Vector3 charRightDefaultPos;
@@ -26,6 +29,7 @@ public class MenuManager : MonoBehaviour {
         Debug.Log(btnPlay.transform.position);
         Debug.Log(btnOptions.transform.position);
         Debug.Log(btnExit.transform.position);
+        canvasLoadingScreen.SetActive(false);
         setDefaultPosition();
         setSpawnPosition();
         tittleMove();
@@ -71,7 +75,25 @@ public class MenuManager : MonoBehaviour {
 
     public void StartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        canvasLoadingScreen.SetActive(true);
+        StartCoroutine(loadAsync());
+    }
+
+    IEnumerator loadAsync()
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+        operation.allowSceneActivation = false;
+        while (!operation.isDone)
+        {
+            Debug.Log("loading" + operation.progress);
+            sliderBarLoading.value = (float)Mathf.Clamp01(operation.progress / .9f);
+            if (operation.progress >= 0.9f)
+            {
+                operation.allowSceneActivation = true;
+            }
+            yield return null;
+        }
+
     }
     
     public void EqitGame()
