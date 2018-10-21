@@ -8,12 +8,15 @@ public class Unit : MonoBehaviour
 {
 
     // Use this for initialization
+    public event EventHandler EVENT_UNIT_DEATH;
+    public event EventHandler EVENT_UNIT_READY;
     private int id;
     private int damage;
     private int healthPoint;
     private int currentHealthPoint;
     private bool isEnemy;
     private bool isDead;
+    private bool isRespawn;
     private Animator animator;
 
     public int Id
@@ -103,6 +106,7 @@ public class Unit : MonoBehaviour
         CurrentHealthPoint = HealthPoint;
         Damage = 20;
         IsDead = false;
+        isRespawn = false;
         animator = GetComponent<Animator>();
         animator.enabled = true;
         animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + Id.ToString(), typeof(RuntimeAnimatorController));
@@ -112,7 +116,7 @@ public class Unit : MonoBehaviour
     private void setWalk()
     {
         animator.SetTrigger("walk");
-        Debug.Log(this.transform.position);
+        //Debug.Log(this.transform.position);
         if (!IsEnemy)
         {
             this.transform.position = new Vector3(-4, 0.8f, 90);
@@ -129,6 +133,7 @@ public class Unit : MonoBehaviour
     private void setIdle()
     {
         animator.SetTrigger("idle");
+        dispatchEvent(EVENT_UNIT_READY, this.gameObject, EventArgs.Empty);
     }
 
     public void getHit(int _damage)
@@ -161,26 +166,32 @@ public class Unit : MonoBehaviour
     // Update is called once per frame
     public void update()
     {
+        updateCheckKOAnimation();
+    }
+
+    private void updateCheckKOAnimation()
+    {
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.2f &&
             animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&
             IsDead)
         {
-            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + " - " + animator.GetCurrentAnimatorStateInfo(0).length);
+            //Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + " - " + animator.GetCurrentAnimatorStateInfo(0).length);
             IsDead = false;
             animator.enabled = false;
-            if (isEnemy)
-            {
-                pullOutKoEnemy();
-            }
-            else
-            {
-                this.gameObject.SetActive(false);
-            }
+            dispatchEvent(EVENT_UNIT_DEATH, this.gameObject, EventArgs.Empty);
         }
     }
 
     private void pullOutKoEnemy()
     {
         transform.DOMove(new Vector3(5, 0.8f, 90), 1.5f).SetEase(Ease.Linear).OnComplete(generateNewEnemyModel);
+    }
+
+    private void dispatchEvent(EventHandler _event, object _sender, EventArgs _eventArgs)
+    {
+        if (_event != null)
+        {
+            _event(_sender, _eventArgs);
+        }
     }
 }

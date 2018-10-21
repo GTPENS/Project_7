@@ -24,26 +24,35 @@ public class GameManager : MonoBehaviour {
 
 	void Start () {
         initDataDefault();
+        attachUnitBase();
         questHandler.SetActive(false);
         startGameCanvas.SetActive(false);
+        DOVirtual.DelayedCall(3, initStartGameBanner);
+    }
+
+    private void initStartGameBanner()
+    {
+        startGameCanvas.SetActive(true);
         DOVirtual.DelayedCall(3, startGame);
     }
 
     private void startGame()
     {
-        startGameCanvas.SetActive(true);
+        hideAnimationStartGame();
+        isBattleReady = true;
+        questHandler.SetActive(true);
+        generateNewQuest();
     }
 
     private void initDataDefault()
     {
         isBattleReady = false;
-        defaultTimer = 2;
+        defaultTimer = 5;
         currentBarTimer = defaultTimer;
         timerSpeed = 0.01f;
-        initDataPlayer();
     }
 
-    private void initDataPlayer()
+    private void attachUnitBase()
     {
         attachUnit(1, false);
         attachUnit(2, true);
@@ -52,17 +61,10 @@ public class GameManager : MonoBehaviour {
     private void generateNewQuest()
     {
         getUIManager().resetFilledQuest();
-        questHandler.SetActive(true);
         questManager.gameObject.GetComponent<QuestManager>().generateQuest();
         listOfAnswer = new List<int>();
         currentBarTimer = defaultTimer;
     }
-
-    private void battleReady()
-    {
-        
-    }
-    
 
     public void inputAnswer(int _idAnswer)
     {
@@ -78,12 +80,12 @@ public class GameManager : MonoBehaviour {
             {
                 if (questManager.gameObject.GetComponent<QuestManager>().checkAnswer(listOfAnswer))
                 {
-                    Debug.Log("answer true");
+                    //Debug.Log("answer true");
                     playerPunch();
                 }
                 else
                 {
-                    Debug.Log("answer false");
+                    //Debug.Log("answer false");
                     enemyPunch();
                 }
                 generateNewQuest();
@@ -116,33 +118,54 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    private List<GameObject> listOfUnit = new List<GameObject>();
+    private List<Unit> listOfUnit = new List<Unit>();
     private void attachUnit(int _id, bool _isEnemy)
     {
         GameObject go = Instantiate(unit);
-        listOfUnit.Add(go);
+        go.GetComponent<Unit>().EVENT_UNIT_DEATH += onUnitDeath;
+        go.GetComponent<Unit>().EVENT_UNIT_READY += onUnitReady;
+        listOfUnit.Add(go.GetComponent<Unit>());
         listOfUnit[listOfUnit.Count - 1].GetComponent<Unit>().init(_id, _isEnemy);
+    }
+
+    private void onUnitReady(object sender, EventArgs e)
+    {
+        initDataDefault();
+        getUIManager().updateEnemyBar(((GameObject)sender).GetComponent<Unit>().CurrentHealthPoint/ ((GameObject)sender).GetComponent<Unit>().HealthPoint);
+        isBattleReady = true;
+        generateNewQuest();
+    }
+
+    private void onUnitDeath(object _sender, EventArgs e)
+    {
+        GameObject sender = ((GameObject)_sender);
+        listOfUnit.Remove(sender.GetComponent<Unit>());
+        sender.GetComponent<Unit>().EVENT_UNIT_DEATH -= onUnitDeath;
+        Destroy(sender);
+        isBattleReady = false;
+        attachUnit(2, true);
     }
 
     private Unit getPlayer()
     {
-        return listOfUnit[0].GetComponent<Unit>();
+        return (listOfUnit[0]) as Unit;
     }
 
     private Unit getEnemy()
     {
-        return listOfUnit[listOfUnit.Count - 1].GetComponent<Unit>();
+        return (listOfUnit[getNumberOfUnits() - 1]) as Unit;
     }
 
     private Unit getUnit(int _index)
     {
-        return listOfUnit[_index].GetComponent<Unit>();
+        return (listOfUnit[_index]) as Unit;
     }
 
     private int getNumberOfUnits()
     {
         return listOfUnit.Count;
     }
+    
 
     private UIManager getUIManager()
     {
@@ -151,14 +174,7 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if(!isBattleReady &&
-            animationStartGame.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.9f)
-        {
-            Debug.Log("isbattle ready");
-            isBattleReady = true;
-            hideAnimationStartGame();
-            generateNewQuest();
-        }
+        
         if (isBattleReady)
         {
             currentBarTimer -= timerSpeed;
