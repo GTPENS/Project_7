@@ -13,6 +13,13 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private List<GameObject> listOfButtonAnimation = new List<GameObject>();
     [SerializeField] private List<GameObject> listOfFilledQuestAnimation = new List<GameObject>();
     [SerializeField] private List<GameObject> listOfFilledQuest = new List<GameObject>();
+    [SerializeField] private Text highscore;
+    [SerializeField] private Slider sliderBarLoading;
+
+    public void updateRound(int _round)
+    {
+        round_txt.text = "ROUND " + _round.ToString();
+    }
 
     public void playButtonAnimation(int _idButton)
     {
@@ -48,7 +55,15 @@ public class UIManager : MonoBehaviour {
         enemmyBar.fillAmount = _fillAmount;
     }
 
+    public void updateHighscore(int _highscore)
+    {
+        highscore.text = _highscore.ToString();
+    }
 
+    public void updateSliderLoadingscreen(float _value)
+    {
+        sliderBarLoading.value = _value;
+    }
 
     // Update is called once per frame
     void Update () {

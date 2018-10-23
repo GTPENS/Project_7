@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private Animator animationStartGame;
     [SerializeField] private GameObject startGameCanvas;
     [SerializeField] private GameObject questHandler;
+    [SerializeField] private GameObject popUpGameOver;
+    [SerializeField] private GameObject canvasLoadingScreen;
     private Animator animatorStartGame;
 
     private List<int> listOfAnswer = new List<int>();
@@ -22,13 +25,19 @@ public class GameManager : MonoBehaviour {
     private float timerSpeed;
     private bool isBattleReady;
     private int unitReadyCounter;
+    private int highscore;
 
+    private const float timerDecreaser = 0.15f;
+    private const float timerDefault = 5;
 	void Start () {
         unitReadyCounter = 0;
+        highscore = 0;
         initDataDefault();
         attachUnitBase();
         questHandler.SetActive(false);
         startGameCanvas.SetActive(false);
+        popUpGameOver.SetActive(false);
+        canvasLoadingScreen.SetActive(false);
     }
 
     private void initStartGameBanner()
@@ -48,7 +57,16 @@ public class GameManager : MonoBehaviour {
     private void initDataDefault()
     {
         isBattleReady = false;
-        defaultTimer = 5;
+        defaultTimer = timerDefault;
+        if(defaultTimer <= 1.5f)
+        {
+            defaultTimer = 1.5f;
+        }
+        else
+        {
+            defaultTimer = timerDefault - (timerDecreaser * highscore);
+        }
+        Debug.Log("timer " + defaultTimer);
         currentBarTimer = defaultTimer;
         timerSpeed = 0.01f;
     }
@@ -103,6 +121,7 @@ public class GameManager : MonoBehaviour {
         if (getPlayer().IsDead)
         {
             Debug.Log("game over");
+            gameOver();
         }
     }
 
@@ -114,6 +133,8 @@ public class GameManager : MonoBehaviour {
         getUIManager().updateEnemyBar((float)getEnemy().CurrentHealthPoint / getEnemy().HealthPoint);
         if (getEnemy().IsDead)
         {
+            highscore++;
+            getUIManager().updateRound(highscore + 1);
             Debug.Log("enemy dead, generate new enemy");
         }
     }
@@ -149,6 +170,7 @@ public class GameManager : MonoBehaviour {
             questHandler.SetActive(true);
             isBattleReady = true;
             generateNewQuest();
+            Debug.Log("timer " + timerSpeed);
         }
     }
 
@@ -160,7 +182,10 @@ public class GameManager : MonoBehaviour {
         Destroy(sender);
         isBattleReady = false;
         questHandler.SetActive(false);
-        attachUnit(2, true);
+        if (sender.GetComponent<Unit>().IsEnemy)
+        {
+            attachUnit(2, true);
+        }
         //unitReadyCounter--;
     }
 
@@ -220,5 +245,35 @@ public class GameManager : MonoBehaviour {
         animationStartGame.GetComponent<Animator>().enabled = false;
         animationStartGame.GetComponent<Animator>().Rebind();
         startGameCanvas.SetActive(false);
+    }
+
+    private void gameOver()
+    {
+        popUpGameOver.SetActive(true);
+        getUIManager().updateHighscore(highscore);
+    }
+
+    public void quitToMenu()
+    {
+        canvasLoadingScreen.SetActive(true);
+        StartCoroutine(loadAsync());
+    }
+
+
+    IEnumerator loadAsync()
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(0);
+        operation.allowSceneActivation = false;
+        while (!operation.isDone)
+        {
+            Debug.Log("loading" + operation.progress);
+            getUIManager().updateSliderLoadingscreen((float)Mathf.Clamp01(operation.progress / .9f));
+            if (operation.progress >= 0.9f)
+            {
+                operation.allowSceneActivation = true;
+            }
+            yield return null;
+        }
+
     }
 }
