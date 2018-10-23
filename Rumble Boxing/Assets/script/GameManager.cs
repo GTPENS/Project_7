@@ -91,11 +91,11 @@ public class GameManager : MonoBehaviour {
         {
             return;
         }
-        if (listOfAnswer.Count < 4)
+        if (listOfAnswer.Count < questManager.GetComponent<QuestManager>().TotalQuest)
         {
             listOfAnswer.Add(_idAnswer);
             getUIManager().showFilledQuest(listOfAnswer.Count);
-            if(listOfAnswer.Count == 4)
+            if(listOfAnswer.Count == questManager.GetComponent<QuestManager>().TotalQuest)
             {
                 if (questManager.gameObject.GetComponent<QuestManager>().checkAnswer(listOfAnswer))
                 {

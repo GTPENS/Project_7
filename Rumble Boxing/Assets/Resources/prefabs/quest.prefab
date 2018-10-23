@@ -68,10 +68,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listOfImageQuest:
-  - {fileID: 21300000, guid: b605f543f63b032479ec39e998b67871, type: 3}
-  - {fileID: 21300000, guid: cb793fe5e19620a4287985f86605a490, type: 3}
-  - {fileID: 21300000, guid: 15af1e723c29f1e41b1a79f01b36bdbe, type: 3}
-  - {fileID: 21300000, guid: 34256130f6a7ce041ae977356ad7deca, type: 3}
+  - {fileID: 21300000, guid: 1364d74934e53cb41bb45ac562b5cd42, type: 3}
+  - {fileID: 21300000, guid: 88e6ae2ee2e0ef446a4823b84b917236, type: 3}
+  - {fileID: 21300000, guid: f48cdd0190ad4a44ca3ef0629f2ebb6f, type: 3}
+  - {fileID: 21300000, guid: d1f8615704f364e408b50afaba79dcca, type: 3}
 --- !u!222 &222128647853454592
 CanvasRenderer:
   m_ObjectHideFlags: 1

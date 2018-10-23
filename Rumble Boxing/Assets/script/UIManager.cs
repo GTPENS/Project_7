@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour {
 
     public void resetFilledQuest()
     {
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             listOfFilledQuest[i].gameObject.SetActive(false);
         }
