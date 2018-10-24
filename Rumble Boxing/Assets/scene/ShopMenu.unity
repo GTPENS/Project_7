@@ -1360,6 +1360,11 @@ MonoBehaviour:
   txt_characterName: {fileID: 1349783526}
   canvasLoadingScreen: {fileID: 1959178740}
   sliderBarLoading: {fileID: 1740621642}
+  listOfAnimationControllerCharater:
+  - {fileID: 9100000, guid: 6f0fed6cfd424e944bed101f0debffd2, type: 2}
+  - {fileID: 9100000, guid: 204ff0bdd26dbf34098afdba3005c74c, type: 2}
+  - {fileID: 9100000, guid: 103eaa018dd9a604898b7be6158896af, type: 2}
+  - {fileID: 9100000, guid: c00ae8001cdea534aadac3212624a1ae, type: 2}
 --- !u!4 &731636221
 Transform:
   m_ObjectHideFlags: 0

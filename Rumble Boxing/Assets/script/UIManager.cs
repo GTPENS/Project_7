@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private List<GameObject> listOfButtonAnimation = new List<GameObject>();
     [SerializeField] private List<GameObject> listOfFilledQuestAnimation = new List<GameObject>();
     [SerializeField] private List<GameObject> listOfFilledQuest = new List<GameObject>();
+    [SerializeField] private List<GameObject> listOfSingleQuest = new List<GameObject>();
     [SerializeField] private Text highscore;
     [SerializeField] private Slider sliderBarLoading;
 
@@ -28,8 +29,11 @@ public class UIManager : MonoBehaviour {
 
     public void showFilledQuest(int _idSingleQuest)
     {
-        listOfFilledQuestAnimation[_idSingleQuest - 1].gameObject.GetComponent<Animator>().SetTrigger("isFilled");
+        listOfFilledQuestAnimation[_idSingleQuest - 1].gameObject.SetActive(true);
         listOfFilledQuest[_idSingleQuest - 1].gameObject.SetActive(true);
+        listOfFilledQuestAnimation[_idSingleQuest - 1].gameObject.transform.position = listOfSingleQuest[_idSingleQuest - 1].gameObject.transform.position;
+        listOfFilledQuest[_idSingleQuest - 1].gameObject.transform.position = listOfSingleQuest[_idSingleQuest - 1].gameObject.transform.position;
+        listOfFilledQuestAnimation[_idSingleQuest - 1].gameObject.GetComponent<Animator>().SetTrigger("isFilled");
     }
 
     public void resetFilledQuest()
@@ -37,6 +41,8 @@ public class UIManager : MonoBehaviour {
         for (int i = 0; i < 5; i++)
         {
             listOfFilledQuest[i].gameObject.SetActive(false);
+            listOfFilledQuestAnimation[i].gameObject.SetActive(false);
+            listOfFilledQuest[i].gameObject.transform.position = listOfSingleQuest[i].gameObject.transform.position;
         }
     }
 

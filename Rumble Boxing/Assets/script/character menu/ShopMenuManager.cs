@@ -13,6 +13,7 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private Text txt_characterName;
     [SerializeField] private GameObject canvasLoadingScreen;
     [SerializeField] private Slider sliderBarLoading;
+    [SerializeField] private List<RuntimeAnimatorController> listOfAnimationControllerCharater = new List<RuntimeAnimatorController>();
 
     private int idModel;
 	void Start () {
@@ -32,7 +33,8 @@ public class ShopMenuManager : MonoBehaviour {
         {
             modelUnit.GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.3f, 0.3f);
         }
-        modelUnit.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + idModel.ToString(), typeof(RuntimeAnimatorController));
+        //modelUnit.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + idModel.ToString(), typeof(RuntimeAnimatorController));
+        modelUnit.GetComponent<Animator>().runtimeAnimatorController = listOfAnimationControllerCharater[idModel - 1];
     }
 
     public void prevModel()
