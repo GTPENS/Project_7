@@ -37,9 +37,10 @@ public class QuestManager : MonoBehaviour {
     {
         for (int i = 0; i < totalQuestDefault; i++)
         {
+            listOfSingleQuests[i].gameObject.SetActive(false);
             listOfSingleQuests[i].gameObject.transform.position = singleQuestDefaultPosition[i];
         }
-        TotalQuest = 5;
+        TotalQuest = Random.Range(3, 6);
         for (int i = 0; i < TotalQuest; i++)
         {
             listOfSingleQuests[i].gameObject.SetActive(true);

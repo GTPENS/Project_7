@@ -12,11 +12,12 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject questManager;
     [SerializeField] private GameObject uiManager;
     [SerializeField] private GameObject unit;
-    [SerializeField] private Animator animationStartGame;
     [SerializeField] private GameObject startGameCanvas;
     [SerializeField] private GameObject questHandler;
     [SerializeField] private GameObject popUpGameOver;
     [SerializeField] private GameObject canvasLoadingScreen;
+    [SerializeField] private GameObject vfxPunchText;
+    [SerializeField] private Animator animationStartGame;
     private Animator animatorStartGame;
 
     private List<int> listOfAnswer = new List<int>();
@@ -27,7 +28,7 @@ public class GameManager : MonoBehaviour {
     private int unitReadyCounter;
     private int highscore;
 
-    private const float timerDecreaser = 0.15f;
+    private const float timerDecreaser = 0.2f;
     private const float timerDefault = 5;
 	void Start () {
         unitReadyCounter = 0;
@@ -118,6 +119,7 @@ public class GameManager : MonoBehaviour {
         getEnemy().attack();
         getPlayer().getHit(damage);
         getUIManager().updatePlayerBar((float)getPlayer().CurrentHealthPoint / getPlayer().HealthPoint);
+        attachVfxPunchText(getPlayer().transform.position.x);
         if (getPlayer().IsDead)
         {
             Debug.Log("game over");
@@ -131,6 +133,7 @@ public class GameManager : MonoBehaviour {
         int damage = getPlayer().Damage;
         getEnemy().getHit(damage);
         getUIManager().updateEnemyBar((float)getEnemy().CurrentHealthPoint / getEnemy().HealthPoint);
+        attachVfxPunchText(getEnemy().transform.position.x);
         if (getEnemy().IsDead)
         {
             highscore++;
@@ -275,5 +278,27 @@ public class GameManager : MonoBehaviour {
             yield return null;
         }
 
+    }
+
+    private List<VfxPunchText> listOfVfx = new List<VfxPunchText>();
+    private void attachVfxPunchText(float _targetPosX)
+    {
+        GameObject go = Instantiate(vfxPunchText);
+        go.GetComponent<VfxPunchText>().EVENT_REMOVE += onRemoveVfxPunchText;
+        listOfVfx.Add(go.GetComponent<VfxPunchText>());
+        listOfVfx[getNumberOfVfxPunchText() - 1].init(_targetPosX);
+    }
+
+    private void onRemoveVfxPunchText(object _sender, EventArgs e)
+    {
+        GameObject sender = ((GameObject)_sender);
+        listOfVfx.Remove(sender.GetComponent<VfxPunchText>());
+        sender.GetComponent<VfxPunchText>().EVENT_REMOVE-= onRemoveVfxPunchText;
+        Destroy(sender);
+    }
+
+    private int getNumberOfVfxPunchText()
+    {
+        return listOfVfx.Count;
     }
 }
