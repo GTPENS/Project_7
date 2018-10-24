@@ -74,8 +74,13 @@ public class GameManager : MonoBehaviour {
 
     private void attachUnitBase()
     {
-        attachUnit(1, false);
-        attachUnit(4, true);
+        int idPlayer = GameplayDataManager.getInstance().IdEquipedUnit;
+        if(idPlayer == null)
+        {
+            idPlayer = 1;
+        }
+        attachUnit(idPlayer, false);
+        attachUnit(2, true);
     }
 
     private void generateNewQuest()

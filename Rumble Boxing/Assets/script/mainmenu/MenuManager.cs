@@ -81,7 +81,7 @@ public class MenuManager : MonoBehaviour {
 
     IEnumerator loadAsync()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(2);
         operation.allowSceneActivation = false;
         while (!operation.isDone)
         {

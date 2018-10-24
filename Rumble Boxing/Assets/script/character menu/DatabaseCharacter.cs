@@ -24,8 +24,8 @@ public class DatabaseCharacter : MonoBehaviour {
             new ArrayList() {"Name"},
             new ArrayList() {"Johny"},
             new ArrayList() {"Alex"},
-            new ArrayList() {"Captain Steve"},
-            new ArrayList() {"Thonas"}
+            new ArrayList() {"Captain 'Steve' America"},
+            new ArrayList() {"Mad 'Thonas' Titan"}
 
         };
     }

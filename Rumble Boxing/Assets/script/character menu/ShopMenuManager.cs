@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ShopMenuManager : MonoBehaviour {
@@ -9,6 +10,10 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private GameObject modelUnit;
     [SerializeField] private Button btn_buy;
     [SerializeField] private Button btn_equip;
+    [SerializeField] private Text txt_characterName;
+    [SerializeField] private GameObject canvasLoadingScreen;
+    [SerializeField] private Slider sliderBarLoading;
+
     private int idModel;
 	void Start () {
         GameplayDataManager.getInstance().reset();
@@ -18,6 +23,7 @@ public class ShopMenuManager : MonoBehaviour {
 
     private void updateModel()
     {
+        txt_characterName.text = DatabaseCharacter.getInstance().getName(idModel);
         if (GameplayDataManager.getInstance().isUnitUnlocked(idModel))
         {
             modelUnit.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
@@ -51,15 +57,37 @@ public class ShopMenuManager : MonoBehaviour {
         Debug.Log(idModel);
     }
 
-    public void unlockMode()
+    public void unlockModel()
     {
         GameplayDataManager.getInstance().unlockUnit(idModel);
         updateModel();
     }
 
+    public void equipModel()
+    {
+        GameplayDataManager.getInstance().IdEquipedUnit = idModel;
+    }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    public void StartGame()
+    {
+        canvasLoadingScreen.SetActive(true);
+        StartCoroutine(loadAsync());
+    }
+
+    IEnumerator loadAsync()
+    {
+        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+        operation.allowSceneActivation = false;
+        while (!operation.isDone)
+        {
+            Debug.Log("loading" + operation.progress);
+            sliderBarLoading.value = (float)Mathf.Clamp01(operation.progress / .9f);
+            if (operation.progress >= 0.9f)
+            {
+                operation.allowSceneActivation = true;
+            }
+            yield return null;
+        }
+
+    }
 }
