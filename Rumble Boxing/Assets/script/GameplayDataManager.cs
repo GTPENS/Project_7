@@ -44,7 +44,7 @@ public class GameplayDataManager : MonoBehaviour {
     public void reset()
     {
         idEquipedUnit = 1;
-        TotalUnits = 2;
+        TotalUnits = 4;
         resetListOfUnlockedUnit();
     }
 

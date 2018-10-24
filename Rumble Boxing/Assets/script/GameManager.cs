@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
     private void attachUnitBase()
     {
         attachUnit(1, false);
-        attachUnit(2, true);
+        attachUnit(4, true);
     }
 
     private void generateNewQuest()
