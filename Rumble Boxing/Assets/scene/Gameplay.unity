@@ -3648,6 +3648,7 @@ GameObject:
   - component: {fileID: 1673779365}
   - component: {fileID: 1673779364}
   - component: {fileID: 1673779363}
+  - component: {fileID: 1673779367}
   m_Layer: 5
   m_Name: UIGameOver
   m_TagString: Untagged
@@ -3735,6 +3736,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1673779367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1673779362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93d8d9472a95334a932efb4aa76129f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliderBarLoading: {fileID: 1621720789}
 --- !u!1 &1686535831
 GameObject:
   m_ObjectHideFlags: 0
@@ -3853,7 +3866,6 @@ MonoBehaviour:
   - {fileID: 1225126098}
   - {fileID: 1957565893}
   highscore: {fileID: 835354293}
-  sliderBarLoading: {fileID: 1621720789}
 --- !u!1 &1737235599
 GameObject:
   m_ObjectHideFlags: 0
