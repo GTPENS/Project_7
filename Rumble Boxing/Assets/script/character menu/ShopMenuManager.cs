@@ -13,6 +13,7 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private GameObject price;
     [SerializeField] private Text txt_price;
     [SerializeField] private Text txt_characterName;
+    [SerializeField] private Text txt_currentMedal;
     [SerializeField] private GameObject canvasLoadingScreen;
     [SerializeField] private Slider sliderBarLoading;
     [SerializeField] private List<RuntimeAnimatorController> listOfAnimationControllerCharater = new List<RuntimeAnimatorController>();
@@ -41,8 +42,9 @@ public class ShopMenuManager : MonoBehaviour {
 
     private void updateModel()
     {
+        txt_currentMedal.text = GameplayDataManager.getInstance().TotalMedals.ToString();
         txt_characterName.text = DatabaseCharacter.getInstance().getName(idModel);
-        txt_price.text = "999";
+        txt_price.text = DatabaseCharacter.getInstance().getPrice(idModel).ToString();
         if (GameplayDataManager.getInstance().isUnitUnlocked(idModel))
         {
             modelUnit.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
@@ -92,8 +94,12 @@ public class ShopMenuManager : MonoBehaviour {
 
     public void unlockModel()
     {
-        GameplayDataManager.getInstance().unlockUnit(idModel);
-        updateModel();
+        if(GameplayDataManager.getInstance().TotalMedals >= DatabaseCharacter.getInstance().getPrice(idModel))
+        {
+            GameplayDataManager.getInstance().TotalMedals -= DatabaseCharacter.getInstance().getPrice(idModel);
+            GameplayDataManager.getInstance().unlockUnit(idModel);
+            updateModel();
+        }
     }
 
     public void equipModel()
@@ -101,6 +107,8 @@ public class ShopMenuManager : MonoBehaviour {
         GameplayDataManager.getInstance().IdEquipedUnit = idModel;
         updateModel();
     }
+
+    
 
     public void StartGame()
     {
