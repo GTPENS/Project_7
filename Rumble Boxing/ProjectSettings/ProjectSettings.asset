@@ -247,7 +247,11 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
+<<<<<<< HEAD
   AndroidKeystoreName: C:/Users/sepay/Documents/GitHub/Project_7/Rumble Boxing/user.keystore
+=======
+  AndroidKeystoreName: 
+>>>>>>> parent of 8e81008... T055_Google play service
   AndroidKeyaliasName: 
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
@@ -553,8 +557,7 @@ PlayerSettings:
   webGLUseEmbeddedResources: 0
   webGLUseWasm: 0
   webGLCompressionFormat: 1
-  scriptingDefineSymbols:
-    4: NO_GPGS
+  scriptingDefineSymbols: {}
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}

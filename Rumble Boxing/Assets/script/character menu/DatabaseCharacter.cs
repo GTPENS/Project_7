@@ -21,11 +21,11 @@ public class DatabaseCharacter : MonoBehaviour {
     {
         arrayOfCharacter = new List<ArrayList>()
         {
-            new ArrayList() {                     "Name", "price unlock"},
-            new ArrayList() {                    "Johny",              0},
-            new ArrayList() {                     "Alex",             10},
-            new ArrayList() {  "Captain 'Steve' America",             50},
-            new ArrayList() {       "Mad 'Thonas' Titan",            100}
+            new ArrayList() {"Name"},
+            new ArrayList() {"Johny"},
+            new ArrayList() {"Alex"},
+            new ArrayList() {"Captain 'Steve' America"},
+            new ArrayList() {"Mad 'Thonas' Titan"}
 
         };
     }
@@ -33,10 +33,5 @@ public class DatabaseCharacter : MonoBehaviour {
     public string getName(int _idCharacter)
     {
         return (string)arrayOfCharacter[_idCharacter][0];
-    }
-
-    public int getPrice(int _idCharacter)
-    {
-        return (int)arrayOfCharacter[_idCharacter][1];
     }
 }

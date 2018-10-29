@@ -14,7 +14,6 @@ public class GameplayDataManager : MonoBehaviour {
     private List<bool> listOfUnlockedUnit;
     private int totalUnits;
     private int idEquipedUnit;
-    private int totalMedals;
 
     public int TotalUnits
     {
@@ -42,24 +41,10 @@ public class GameplayDataManager : MonoBehaviour {
         }
     }
 
-    public int TotalMedals
-    {
-        get
-        {
-            return totalMedals;
-        }
-
-        set
-        {
-            totalMedals = value;
-        }
-    }
-
     public void reset()
     {
         idEquipedUnit = 1;
         TotalUnits = 4;
-        TotalMedals = 1000;
         resetListOfUnlockedUnit();
     }
 
