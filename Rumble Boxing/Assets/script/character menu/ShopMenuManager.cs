@@ -10,28 +10,59 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private GameObject modelUnit;
     [SerializeField] private Button btn_buy;
     [SerializeField] private Button btn_equip;
+    [SerializeField] private GameObject price;
+    [SerializeField] private Text txt_price;
     [SerializeField] private Text txt_characterName;
     [SerializeField] private GameObject canvasLoadingScreen;
     [SerializeField] private Slider sliderBarLoading;
     [SerializeField] private List<RuntimeAnimatorController> listOfAnimationControllerCharater = new List<RuntimeAnimatorController>();
 
+    enum showedMenu
+    {
+        skinMenu = 1,
+        shopMenu = 2,
+        rankMenu = 3
+    }
+
+    private int idShowedMenu;
+
     private int idModel;
 	void Start () {
         GameplayDataManager.getInstance().reset();
         idModel = 1;
+        showMenu((int)showedMenu.skinMenu);
         updateModel();
 	}
+
+    private void showMenu(int _idMenu)
+    {
+        idShowedMenu = _idMenu;
+    }
 
     private void updateModel()
     {
         txt_characterName.text = DatabaseCharacter.getInstance().getName(idModel);
+        txt_price.text = "999";
         if (GameplayDataManager.getInstance().isUnitUnlocked(idModel))
         {
             modelUnit.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
+            btn_buy.gameObject.SetActive(false);
+            price.SetActive(false);
+            if (GameplayDataManager.getInstance().IdEquipedUnit == idModel)
+            {
+                btn_equip.gameObject.SetActive(false);
+            }
+            else
+            {
+                btn_equip.gameObject.SetActive(true);
+            }
         }
         else
         {
             modelUnit.GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.3f, 0.3f);
+            price.SetActive(true);
+            btn_equip.gameObject.SetActive(false);
+            btn_buy.gameObject.SetActive(true);
         }
         //modelUnit.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + idModel.ToString(), typeof(RuntimeAnimatorController));
         modelUnit.GetComponent<Animator>().runtimeAnimatorController = listOfAnimationControllerCharater[idModel - 1];
@@ -68,6 +99,7 @@ public class ShopMenuManager : MonoBehaviour {
     public void equipModel()
     {
         GameplayDataManager.getInstance().IdEquipedUnit = idModel;
+        updateModel();
     }
 
     public void StartGame()
