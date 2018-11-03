@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using GAF.Assets;
+using GAF.Core;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +12,7 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private GameObject modelUnit;
     [SerializeField] private GameObject price;
     [SerializeField] private GameObject canvasLoadingScreen;
+    [SerializeField] private List<GAFAnimationAsset> listOfCharacter = new List<GAFAnimationAsset>();
     [SerializeField] private Button btn_buy;
     [SerializeField] private Button btn_equip;
     [SerializeField] private Text txt_price;
@@ -17,6 +20,7 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private Text txt_currentMedal;
     [SerializeField] private Slider sliderBarLoading;
     [SerializeField] private List<RuntimeAnimatorController> listOfAnimationControllerCharater = new List<RuntimeAnimatorController>();
+    
 
     enum showedMenu
     {
@@ -42,12 +46,18 @@ public class ShopMenuManager : MonoBehaviour {
 
     private void updateModel()
     {
+        modelUnit.GetComponent<GAFMovieClip>().clear(false);
+        modelUnit.GetComponent<GAFMovieClip>().asset = listOfCharacter[idModel - 1];
+        modelUnit.GetComponent<GAFMovieClip>().initialize(listOfCharacter[idModel - 1]);
+        modelUnit.GetComponent<GAFMovieClip>().settings.init(listOfCharacter[idModel - 1]);
+        modelUnit.GetComponent<GAFMovieClip>().reload();
+        modelUnit.GetComponent<GAFMovieClip>().setSequence("idle", true);
         txt_characterName.text = DatabaseCharacter.getInstance().getName(idModel);
         txt_price.text = DatabaseCharacter.getInstance().getPrice(idModel).ToString();
         txt_currentMedal.text = GameplayDataManager.getInstance().TotalMedals.ToString();
         if (GameplayDataManager.getInstance().isUnitUnlocked(idModel))
         {
-            modelUnit.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
+            //modelUnit.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1);
             btn_buy.gameObject.SetActive(false);
             price.SetActive(false);
             if (GameplayDataManager.getInstance().IdEquipedUnit == idModel)
@@ -61,13 +71,13 @@ public class ShopMenuManager : MonoBehaviour {
         }
         else
         {
-            modelUnit.GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.3f, 0.3f);
+            //modelUnit.GetComponent<SpriteRenderer>().color = new Color(0.3f, 0.3f, 0.3f);
             price.SetActive(true);
             btn_equip.gameObject.SetActive(false);
             btn_buy.gameObject.SetActive(true);
         }
         //modelUnit.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + idModel.ToString(), typeof(RuntimeAnimatorController));
-        modelUnit.GetComponent<Animator>().runtimeAnimatorController = listOfAnimationControllerCharater[idModel - 1];
+        //modelUnit.GetComponent<Animator>().runtimeAnimatorController = listOfAnimationControllerCharater[idModel - 1];
     }
 
     public void prevModel()
