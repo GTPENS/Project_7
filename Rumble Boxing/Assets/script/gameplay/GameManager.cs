@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour {
         {
             idPlayer = 1;
         }
-        attachUnit(1, false);
+        attachUnit(idPlayer, false);
         attachUnit(2, true);
     }
 
