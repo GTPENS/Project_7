@@ -88,8 +88,8 @@ public class GameManager : MonoBehaviour {
         {
             idPlayer = 1;
         }
-        attachUnit(idPlayer, false);
-        attachUnit(2, true);
+        attachUnit(1, false);
+        attachUnit(11, true);
     }
 
     private void generateNewQuest()

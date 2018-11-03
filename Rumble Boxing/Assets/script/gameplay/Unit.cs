@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using GAF.Core;
+using GAF.Assets;
 
 public class Unit : MonoBehaviour
 {
@@ -18,6 +20,13 @@ public class Unit : MonoBehaviour
     private bool isDead;
     private bool isRespawn;
     private Animator animator;
+    private GAFMovieClip clip;
+    [SerializeField] List<GAFAnimationAsset> listOfGAFAnimationAssets = new List<GAFAnimationAsset>();
+    private const float animationIdleDuration   = 0.6333f;
+    private const float animationKODuration     = 1.5333f - animationIdleDuration;
+    private const float animationPunchDuration  = 2.2667f - (animationIdleDuration + animationKODuration);
+    private const float animationWalkDuration   = 2.9333f - (animationIdleDuration + animationKODuration + animationPunchDuration);
+    private const float animationHitDuration    = 3.5667f - (animationIdleDuration + animationKODuration + animationPunchDuration + animationWalkDuration);
 
     public int Id
     {
@@ -107,44 +116,73 @@ public class Unit : MonoBehaviour
         Damage = 20;
         IsDead = false;
         isRespawn = false;
-        animator = GetComponent<Animator>();
-        animator.enabled = true;
-        animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + Id.ToString(), typeof(RuntimeAnimatorController));
+        clip = GetComponent<GAFMovieClip>();
+        setupGafAnimation();
+        //animator = GetComponent<Animator>();
+        //animator.enabled = true;
+        //animator.runtimeAnimatorController = (RuntimeAnimatorController)Resources.Load("animation/Character" + Id.ToString(), typeof(RuntimeAnimatorController));
         setWalk();
+    }
+
+    private void setupGafAnimation()
+    {
+        clip.clear(false);
+        clip.asset = listOfGAFAnimationAssets[id - 1];
+        clip.initialize(listOfGAFAnimationAssets[id - 1]);
+        clip.settings.init(listOfGAFAnimationAssets[id - 1]);
+        clip.reload();
+        clip.settings.zLayerScale = 0;
     }
 
     private void setWalk()
     {
-        animator.SetTrigger("walk");
+        this.GetComponent<GAFMovieClip>().setSequence("walk", true);
+        Debug.Log("walk" + this.GetComponent<GAFMovieClip>().timelineID);
+        //animator.SetTrigger("walk");
         //Debug.Log(this.transform.position);
         if (!IsEnemy)
         {
             this.transform.position = new Vector3(-4, 0.8f, 90);
-            this.transform.DOMove(new Vector3(-1.1f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setIdle);
+            this.transform.DOMove(new Vector3(-1.1f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
         }
         else
         {
             this.transform.localScale = new Vector3(-0.7f, 0.7f, 0.7f);
             this.transform.position = new Vector3(4, 0.8f, 90);
-            this.transform.DOMove(new Vector3(0.8f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setIdle);
+            this.transform.DOMove(new Vector3(0.8f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
         }
+    }
+
+    private void setUnitReady()
+    {
+        //animator.SetTrigger("idle");
+        setIdle();
+        Debug.Log("idle" + this.GetComponent<GAFMovieClip>().asset.getSequences(this.GetComponent<GAFMovieClip>().timelineID));
+        dispatchEvent(EVENT_UNIT_READY, this.gameObject, EventArgs.Empty);
     }
 
     private void setIdle()
     {
-        animator.SetTrigger("idle");
-        dispatchEvent(EVENT_UNIT_READY, this.gameObject, EventArgs.Empty);
+        clip.setSequence("idle", true);
     }
 
     public void getHit(int _damage)
     {
         CurrentHealthPoint -= _damage;
-        animator.SetTrigger("hit");
+        setHit();
+        Debug.Log("hit" + this.GetComponent<GAFMovieClip>().timelineID);
+        //animator.SetTrigger("hit");
         if (CurrentHealthPoint <= 0)
         {
             IsDead = true;
             setIsDead();
         }
+    }
+
+    private void setHit()
+    {
+        clip.setSequence("hit", true);
+        DOVirtual.DelayedCall(animationHitDuration, setIdle);
     }
 
     private void generateNewEnemyModel()
@@ -156,13 +194,35 @@ public class Unit : MonoBehaviour
     private void setIsDead()
     {
         //animation death here
-        animator.SetTrigger("ko");
+        setKo();
+        Debug.Log("ko" + this.GetComponent<GAFMovieClip>().timelineID);
+        //animator.SetTrigger("ko");
+    }
+
+    private void setKo()
+    {
+        clip.setSequence("ko", true);
+        DOVirtual.DelayedCall(animationKODuration, dispatchKo);
+    }
+
+    private void dispatchKo()
+    {
+        dispatchEvent(EVENT_UNIT_DEATH, this.gameObject, EventArgs.Empty);
     }
 
     public void attack()
     {
-        animator.SetTrigger("punch");
+        setPunch();
+        Debug.Log("punch" + this.GetComponent<GAFMovieClip>().timelineID);
+        //animator.SetTrigger("punch");
     }
+
+    private void setPunch()
+    {
+        clip.setSequence("punch", true);
+        DOVirtual.DelayedCall(animationPunchDuration, setIdle);
+    }
+
     // Update is called once per frame
     public void update()
     {
@@ -171,15 +231,16 @@ public class Unit : MonoBehaviour
 
     private void updateCheckKOAnimation()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.2f &&
+        
+        /*if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length - 0.2f &&
             animator.GetCurrentAnimatorStateInfo(0).IsName("character ko") &&
             IsDead)
         {
             //Debug.Log(animator.GetCurrentAnimatorStateInfo(0).normalizedTime + " - " + animator.GetCurrentAnimatorStateInfo(0).length);
             IsDead = false;
             animator.enabled = false;
-            dispatchEvent(EVENT_UNIT_DEATH, this.gameObject, EventArgs.Empty);
-        }
+            
+        }*/
     }
 
     private void pullOutKoEnemy()
