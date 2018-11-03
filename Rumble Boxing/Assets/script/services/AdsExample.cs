@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
+using UnityEditor.Advertisements;
 
 public class AdsExample : MonoBehaviour {
 
