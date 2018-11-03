@@ -143,6 +143,11 @@ public class ShopMenuManager : MonoBehaviour {
             }
             yield return null;
         }
+    }
 
+    public void showLeaderBoard()
+    {
+        GooglePlayGameServices.addScoreToLeaderBoard(RumbleBoxingResources.leaderboard_longest_round, GameplayDataManager.getInstance().HighScore);
+        GooglePlayGameServices.showLeaderBoard();
     }
 }

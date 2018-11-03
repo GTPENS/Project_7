@@ -53,8 +53,8 @@ public class QuestManager : MonoBehaviour {
                                             listOfSingleQuests[i + 1].gameObject.transform.position.y);
                 listOfSingleQuests[i].gameObject.transform.position = newPos;
             }
-            int idRandom = Random.Range(1, 4);
-            listOfSingleQuests[i].setId(idRandom);
+            int idRandom = Random.Range(0, 4);
+            listOfSingleQuests[i].setId(idRandom + 1);
         }
     }
 

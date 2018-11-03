@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour {
         {
             idPlayer = 1;
         }
-        attachUnit(1, false);
+        attachUnit(idPlayer, false);
         attachUnit(11, true);
     }
 
@@ -289,6 +289,10 @@ public class GameManager : MonoBehaviour {
     {
         popUpGameOver.SetActive(true);
         getUIManager().updateHighscore(highscore);
+        if(highscore > GameplayDataManager.getInstance().HighScore)
+        {
+            GameplayDataManager.getInstance().HighScore = highscore;
+        }
     }
 
     private List<VfxPunchText> listOfVfx = new List<VfxPunchText>();
@@ -297,7 +301,7 @@ public class GameManager : MonoBehaviour {
         GameObject go = Instantiate(vfxPunchText);
         go.GetComponent<VfxPunchText>().EVENT_REMOVE += onRemoveVfxPunchText;
         listOfVfx.Add(go.GetComponent<VfxPunchText>());
-        listOfVfx[getNumberOfVfxPunchText() - 1].init(_targetPosX);
+        listOfVfx[getNumberOfVfxPunchText() - 1].init(_targetPosX/3);
     }
 
     private void onRemoveVfxPunchText(object _sender, EventArgs e)

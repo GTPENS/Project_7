@@ -23,10 +23,10 @@ public class Unit : MonoBehaviour
     private GAFMovieClip clip;
     [SerializeField] List<GAFAnimationAsset> listOfGAFAnimationAssets = new List<GAFAnimationAsset>();
     private const float animationIdleDuration   = 0.6333f;
-    private const float animationKODuration     = 1.5333f - animationIdleDuration;
-    private const float animationPunchDuration  = 2.2667f - (animationIdleDuration + animationKODuration);
-    private const float animationWalkDuration   = 2.9333f - (animationIdleDuration + animationKODuration + animationPunchDuration);
-    private const float animationHitDuration    = 3.5667f - (animationIdleDuration + animationKODuration + animationPunchDuration + animationWalkDuration);
+    private const float animationKODuration     = 0.6f;
+    private const float animationPunchDuration  = 0.65f;
+    private const float animationWalkDuration   = 0.6333f;
+    private const float animationHitDuration    = 0.6f;
 
     public int Id
     {
@@ -142,14 +142,14 @@ public class Unit : MonoBehaviour
         //Debug.Log(this.transform.position);
         if (!IsEnemy)
         {
-            this.transform.position = new Vector3(-4, 0.8f, 90);
-            this.transform.DOMove(new Vector3(-1.1f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
+            this.transform.position = new Vector3(-6.07f, 3.2f, 90);
+            this.transform.DOMove(new Vector3(-3.2f, 3.2f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
         }
         else
         {
-            this.transform.localScale = new Vector3(-0.7f, 0.7f, 0.7f);
-            this.transform.position = new Vector3(4, 0.8f, 90);
-            this.transform.DOMove(new Vector3(0.8f, 0.8f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
+            this.transform.localScale = new Vector3(-0.009f, 0.009f, 1f);
+            this.transform.position = new Vector3(6.07f, 3.2f, 90);
+            this.transform.DOMove(new Vector3(3.2f, 3.2f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
         }
     }
 

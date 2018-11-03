@@ -26,14 +26,13 @@ public class MenuManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        Debug.Log(btnPlay.transform.position);
-        Debug.Log(btnOptions.transform.position);
-        Debug.Log(btnExit.transform.position);
         canvasLoadingScreen.SetActive(false);
         setDefaultPosition();
         setSpawnPosition();
         tittleMove();
     }
+
+    
 
     private void setDefaultPosition()
     {

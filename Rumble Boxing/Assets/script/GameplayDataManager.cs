@@ -15,6 +15,7 @@ public class GameplayDataManager : MonoBehaviour {
     private int totalUnits;
     private int idEquipedUnit;
     private int totalMedals;
+    private int highScore;
 
     public int TotalUnits
     {
@@ -52,6 +53,19 @@ public class GameplayDataManager : MonoBehaviour {
         set
         {
             totalMedals = value;
+        }
+    }
+
+    public int HighScore
+    {
+        get
+        {
+            return highScore;
+        }
+
+        set
+        {
+            highScore = value;
         }
     }
 
