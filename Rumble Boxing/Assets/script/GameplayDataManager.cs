@@ -73,7 +73,6 @@ public class GameplayDataManager : MonoBehaviour {
     public void init()
     {
         reset();
-        SaveGame.Clear();
         bool exists = SaveGame.Exists("idEquipedUnit");
         Debug.Log("is save game exist ? : " + exists);
         
