@@ -3,42 +3,78 @@ using System.Collections.Generic;
 using UnityEngine;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
 
 public class GooglePlayGameServices : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-        DontDestroyOnLoad(this);
-        setupGooglePlayeServices();
-        signIn();
-    }
-
-    private void setupGooglePlayeServices()
+    #region PUBLIC_VAR
+    #endregion
+    #region DEFAULT_UNITY_CALLBACKS
+    void Start()
     {
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
-        PlayGamesPlatform.InitializeInstance(config);
+        // recommended for debugging:
+        PlayGamesPlatform.DebugLogEnabled = true;
+
+        // Activate the Google Play Games platform
         PlayGamesPlatform.Activate();
+        LogIn();
     }
-
-    private void signIn()
+    #endregion
+    #region BUTTON_CALLBACKS
+    /// <summary>
+    /// Login In Into Your Google+ Account
+    /// </summary>
+    public void LogIn()
     {
-        Social.localUser.Authenticate(success => { });
+
+        Social.localUser.Authenticate((bool success) =>
+        {
+            if (success)
+            {
+                Debug.Log("Login Sucess");
+            }
+            else
+            {
+                Debug.Log("Login failed");
+            }
+        });
     }
-
-    #region Leaderboard
-    public static void addScoreToLeaderBoard(string _leaderboardId, long _score)
+    /// <summary>
+    /// Shows All Available Leaderborad
+    /// </summary>
+    public void OnShowLeaderBoard()
     {
-        Social.ReportScore(_score, _leaderboardId, success => { });
-    }
-
-    public static void showLeaderBoard()
-    {
+        LogIn();
         Social.ShowLeaderboardUI();
+        //        Social.ShowLeaderboardUI (); // Show all leaderboard
+        //((PlayGamesPlatform)Social.Active).ShowLeaderboardUI(RumbleBoxingResources.leaderboard_longest_round); // Show current (Active) leaderboard
     }
-    #endregion /Leaderboard
+    /// <summary>
+    /// Adds Score To leader board
+    /// </summary>
+    public void OnAddScoreToLeaderBorad()
+    {
+        if (Social.localUser.authenticated)
+        {
+            Social.ReportScore(GameplayDataManager.getInstance().HighScore, RumbleBoxingResources.leaderboard_longest_round, (bool success) =>
+            {
+                if (success)
+                {
+                    Debug.Log("Update Score Success");
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+                }
+                else
+                {
+                    Debug.Log("Update Score Fail");
+                }
+            });
+        }
+    }
+    /// <summary>
+    /// On Logout of your Google+ Account
+    /// </summary>
+    public void OnLogOut()
+    {
+        ((PlayGamesPlatform)Social.Active).SignOut();
+    }
+    #endregion
 }

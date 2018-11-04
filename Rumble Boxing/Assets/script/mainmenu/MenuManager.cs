@@ -26,6 +26,7 @@ public class MenuManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        GameplayDataManager.getInstance().init();
         canvasLoadingScreen.SetActive(false);
         setDefaultPosition();
         setSpawnPosition();

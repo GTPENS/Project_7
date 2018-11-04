@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using BayatGames.SaveGameFree;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,6 @@ public class GameplayDataManager : MonoBehaviour {
     {
         return gameplayDataManager;
     }
-
 
     private List<bool> listOfUnlockedUnit;
     private int totalUnits;
@@ -69,11 +69,50 @@ public class GameplayDataManager : MonoBehaviour {
         }
     }
 
+
+    public void init()
+    {
+        reset();
+        
+        bool exists = SaveGame.Exists("idEquipedUnit");
+        Debug.Log("is save game exist ? : " + exists);
+        
+        if (exists)
+        {
+            
+            loadGame();
+        }
+        else
+        {
+            saveGame();
+        }
+    }
+
+
+    public void loadGame()
+    {
+        idEquipedUnit   = SaveGame.Load<int>("idEquipedUnit");
+        TotalUnits      = SaveGame.Load<int>("TotalUnits");
+        totalMedals     = SaveGame.Load<int>("totalMedals");
+        highScore       = SaveGame.Load<int>("highScore");
+        listOfUnlockedUnit = SaveGame.Load<List<bool>>("listOfUnlockedUnit");
+    }
+
+    public void saveGame()
+    {
+        SaveGame.Save<List<bool>>("listOfUnlockedUnit", listOfUnlockedUnit);
+        SaveGame.Save<int>("totalUnits", TotalUnits);
+        SaveGame.Save<int>("idEquipedUnit", idEquipedUnit);
+        SaveGame.Save<int>("totalMedals", totalMedals);
+        SaveGame.Save<int>("highScore", highScore);
+    }
+
     public void reset()
     {
         idEquipedUnit = 1;
         TotalUnits = 3;
-        totalMedals = 1000;
+        totalMedals = 0;
+        highScore = 0;
         resetListOfUnlockedUnit();
     }
 

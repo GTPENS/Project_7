@@ -3854,6 +3854,7 @@ MonoBehaviour:
   vfxPunchText: {fileID: 1551312761658394, guid: d314c637c76af824e9ea535f23694012,
     type: 2}
   animationStartGame: {fileID: 2042154231}
+  watchVideoButton: {fileID: 935071679}
 --- !u!1 &1712244928
 GameObject:
   m_ObjectHideFlags: 0
@@ -5012,7 +5013,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1673779367}
+      - m_Target: {fileID: 1686535833}
         m_MethodName: quitToMenu
         m_Mode: 1
         m_Arguments:
@@ -5220,7 +5221,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &2071572499
 RectTransform:

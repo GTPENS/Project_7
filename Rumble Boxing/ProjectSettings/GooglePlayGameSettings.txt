@@ -1,5 +1,5 @@
-lastUpgrade=00953
-proj.pluginVersion=0.9.53
+lastUpgrade=00950
+proj.pluginVersion=0.9.50
 proj.AppId=88982909659
 and.BundleId=com.WPG.RumbleBoxing
 proj.classDir=Assets

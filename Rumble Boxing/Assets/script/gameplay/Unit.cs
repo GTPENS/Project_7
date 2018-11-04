@@ -131,7 +131,7 @@ public class Unit : MonoBehaviour
         clip.initialize(listOfGAFAnimationAssets[id - 1]);
         clip.settings.init(listOfGAFAnimationAssets[id - 1]);
         clip.reload();
-        clip.settings.zLayerScale = 0;
+        clip.settings.zLayerScale = 0.02f;
     }
 
     private void setWalk()
@@ -142,14 +142,14 @@ public class Unit : MonoBehaviour
         //Debug.Log(this.transform.position);
         if (!IsEnemy)
         {
-            this.transform.position = new Vector3(-6.07f, 3.2f, 90);
-            this.transform.DOMove(new Vector3(-3.2f, 3.2f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
+            this.transform.position = new Vector3(-6.07f, 3.2f, 88);
+            this.transform.DOMove(new Vector3(-3.2f, 3.2f, 88), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
         }
         else
         {
             this.transform.localScale = new Vector3(-0.009f, 0.009f, 1f);
-            this.transform.position = new Vector3(6.07f, 3.2f, 90);
-            this.transform.DOMove(new Vector3(3.2f, 3.2f, 90), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
+            this.transform.position = new Vector3(6.07f, 3.2f, 88);
+            this.transform.DOMove(new Vector3(3.2f, 3.2f, 88), 2).SetEase(Ease.Linear).OnComplete(setUnitReady);
         }
     }
 

@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject canvasLoadingScreen;
     [SerializeField] private GameObject vfxPunchText;
     [SerializeField] private Animator animationStartGame;
+    [SerializeField] private Button watchVideoButton;
     private Animator animatorStartGame;
 
     private List<int> listOfAnswer = new List<int>();
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour {
     private float currentBarTimer;
     private float timerSpeed;
     private bool isBattleReady;
+    private bool isFirstTimeDead;
     private int unitReadyCounter;
     private int highscore;
 
@@ -42,6 +44,7 @@ public class GameManager : MonoBehaviour {
     void Start () {
         unitReadyCounter = 0;
         highscore = 0;
+        isFirstTimeDead = true;
         initDataDefault();
         attachUnitBase();
         questHandler.SetActive(false);
@@ -208,7 +211,9 @@ public class GameManager : MonoBehaviour {
         questHandler.SetActive(false);
         if (sender.GetComponent<Unit>().IsEnemy)
         {
-            attachUnit(2, true);
+            int medal = 5 * highscore;
+            GameplayDataManager.getInstance().HighScore += medal;
+            attachUnit(11, true);
         }
         //unitReadyCounter--;
     }
@@ -287,12 +292,22 @@ public class GameManager : MonoBehaviour {
 
     private void gameOver()
     {
+        if (isFirstTimeDead)
+        {
+            watchVideoButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            watchVideoButton.gameObject.SetActive(false);
+        }
+        isFirstTimeDead = false;
         popUpGameOver.SetActive(true);
         getUIManager().updateHighscore(highscore);
         if(highscore > GameplayDataManager.getInstance().HighScore)
         {
             GameplayDataManager.getInstance().HighScore = highscore;
         }
+        GameplayDataManager.getInstance().saveGame();
     }
 
     private List<VfxPunchText> listOfVfx = new List<VfxPunchText>();

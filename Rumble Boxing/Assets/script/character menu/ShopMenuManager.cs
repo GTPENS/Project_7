@@ -33,7 +33,7 @@ public class ShopMenuManager : MonoBehaviour {
 
     private int idModel;
 	void Start () {
-        GameplayDataManager.getInstance().reset();
+        //GameplayDataManager.getInstance().reset();
         idModel = 1;
         showMenu((int)showedMenu.skinMenu);
         updateModel();
@@ -112,6 +112,7 @@ public class ShopMenuManager : MonoBehaviour {
             GameplayDataManager.getInstance().unlockUnit(idModel);
         }
         updateModel();
+        GameplayDataManager.getInstance().saveGame();
     }
 
     public void equipModel()
@@ -121,6 +122,7 @@ public class ShopMenuManager : MonoBehaviour {
             GameplayDataManager.getInstance().IdEquipedUnit = idModel;
         }
         updateModel();
+        GameplayDataManager.getInstance().saveGame();
     }
 
     public void StartGame()
@@ -143,11 +145,5 @@ public class ShopMenuManager : MonoBehaviour {
             }
             yield return null;
         }
-    }
-
-    public void showLeaderBoard()
-    {
-        GooglePlayGameServices.addScoreToLeaderBoard(RumbleBoxingResources.leaderboard_longest_round, GameplayDataManager.getInstance().HighScore);
-        GooglePlayGameServices.showLeaderBoard();
     }
 }

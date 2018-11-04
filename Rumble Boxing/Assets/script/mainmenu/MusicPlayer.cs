@@ -4,23 +4,31 @@ using UnityEngine;
 
 public class MusicPlayer : MonoBehaviour {
 
-    private AudioSource audioscr;
-    private float musicVol = 1;
+    private static MusicPlayer instance = null;
 
-    // Use this for initialization
-    void Start () {
-        audioscr = GetComponent<AudioSource>();
-    }
-	
-	// Update is called once per frame
-	void Update () {
-        
-        audioscr.volume = musicVol;
-        
-    }
-
-    public void SetVol(float vol)
+    public static MusicPlayer Instance
     {
-        musicVol = vol;
+        get { return instance; }
+    }
+
+    void Awake()
+    {
+        var NewMusic: AudioClip;
+
+        if (instance != null && instance != this)
+        {
+            if (instance.audio.clip != audio.clip)
+            {
+                instance.audio.clip = audio.clip;
+                instance.audio.volume = audio.volume;
+                instance.audio.Play();
+            }
+
+            Destroy(this.gameObject);
+            return;
+        }
+        instance = this;
+        audio.Play();
+        DontDestroyOnLoad(this.gameObject);
     }
 }
