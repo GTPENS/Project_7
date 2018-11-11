@@ -12,6 +12,8 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private GameObject modelUnit;
     [SerializeField] private GameObject price;
     [SerializeField] private GameObject canvasLoadingScreen;
+    [SerializeField] private GameObject UIOptions;
+    [SerializeField] private Toggle music;
     [SerializeField] private List<GAFAnimationAsset> listOfCharacter = new List<GAFAnimationAsset>();
     [SerializeField] private Button btn_buy;
     [SerializeField] private Button btn_equip;
@@ -145,5 +147,29 @@ public class ShopMenuManager : MonoBehaviour {
             }
             yield return null;
         }
+    }
+
+    public void showOptions()
+    {
+        if (AudioManager.instance.isMute())
+        {
+            music.isOn = true;
+            AudioManager.instance.mute();
+        }
+        else
+        {
+            music.isOn = false;
+        }
+        UIOptions.SetActive(true);
+    }
+
+    public void hideOptions()
+    {
+        UIOptions.SetActive(false);
+    }
+
+    public void muteMusic()
+    {
+        AudioManager.instance.mute();
     }
 }

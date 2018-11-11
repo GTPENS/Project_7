@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject popUpGameOver;
     [SerializeField] private GameObject canvasLoadingScreen;
     [SerializeField] private GameObject vfxPunchText;
+    [SerializeField] private GameObject UIPauseGame;
+    [SerializeField] private Toggle music;
     [SerializeField] private Animator animationStartGame;
     [SerializeField] private Button watchVideoButton;
     private Animator animatorStartGame;
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour {
     private float timerSpeed;
     private bool isBattleReady;
     private bool isFirstTimeDead;
+    private bool isPaused;
     private int unitReadyCounter;
     private int highscore;
 
@@ -42,6 +45,8 @@ public class GameManager : MonoBehaviour {
 #endif
 
     void Start () {
+        isPaused = true;
+        UIPauseGame.SetActive(false);
         unitReadyCounter = 0;
         highscore = 0;
         isFirstTimeDead = true;
@@ -61,6 +66,7 @@ public class GameManager : MonoBehaviour {
 
     private void startGame()
     {
+        isPaused = false;
         hideAnimationStartGame();
         questHandler.SetActive(true);
         isBattleReady = true;
@@ -105,7 +111,15 @@ public class GameManager : MonoBehaviour {
 
     public void inputAnswer(int _idAnswer)
     {
+        if (isPaused)
+        {
+            return;
+        }
         if (!isBattleReady)
+        {
+            return;
+        }
+        if(unitReadyCounter != 2)
         {
             return;
         }
@@ -260,7 +274,10 @@ public class GameManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        
+        if (isPaused)
+        {
+            return;
+        }
         if (isBattleReady)
         {
             currentBarTimer -= timerSpeed;
@@ -382,5 +399,25 @@ public class GameManager : MonoBehaviour {
         {
             Debug.LogError("Video tidak ditampilkan");
         }
+    }
+
+    public void pauseGame()
+    {
+        isPaused = !isPaused;
+        if (AudioManager.instance.isMute())
+        {
+            music.isOn = true;
+            AudioManager.instance.mute();
+        }
+        else
+        {
+            music.isOn = false;
+        }
+        UIPauseGame.SetActive(isPaused);
+    }
+
+    public void muteSound()
+    {
+        GameObject.Find("AudioManager").GetComponent<AudioSource>().mute = !GameObject.Find("AudioManager").GetComponent<AudioSource>().mute;
     }
 }
