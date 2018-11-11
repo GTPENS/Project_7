@@ -334,13 +334,13 @@ public class GameManager : MonoBehaviour {
 
     public void quitToMenu()
     {
-        this.gameObject.SetActive(true);
+        canvasLoadingScreen.SetActive(true);
         StartCoroutine(loadAsync());
     }
 
     IEnumerator loadAsync()
     {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(0);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(2);
         operation.allowSceneActivation = false;
         while (!operation.isDone)
         {
@@ -356,7 +356,7 @@ public class GameManager : MonoBehaviour {
 
     private void respawn()
     {
-        attachUnit(1, false);
+        attachUnit(GameplayDataManager.getInstance().IdEquipedUnit, false);
     }
 
     public void ShowAd()
