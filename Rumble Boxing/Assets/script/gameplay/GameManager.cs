@@ -320,10 +320,12 @@ public class GameManager : MonoBehaviour {
         isFirstTimeDead = false;
         popUpGameOver.SetActive(true);
         getUIManager().updateHighscore(highscore);
+        getUIManager().updateMedal(highscore * 2);
         if(highscore > GameplayDataManager.getInstance().HighScore)
         {
             GameplayDataManager.getInstance().HighScore = highscore;
         }
+
         GameplayDataManager.getInstance().saveGame();
     }
 
@@ -351,6 +353,9 @@ public class GameManager : MonoBehaviour {
 
     public void quitToMenu()
     {
+        int newMedal = highscore * 2;
+        GameplayDataManager.getInstance().TotalMedals += newMedal;
+        GameplayDataManager.getInstance().saveGame();
         canvasLoadingScreen.SetActive(true);
         StartCoroutine(loadAsync());
     }

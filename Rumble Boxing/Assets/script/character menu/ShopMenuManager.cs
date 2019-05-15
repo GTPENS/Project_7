@@ -22,7 +22,7 @@ public class ShopMenuManager : MonoBehaviour {
     [SerializeField] private Text txt_currentMedal;
     [SerializeField] private Slider sliderBarLoading;
     [SerializeField] private List<RuntimeAnimatorController> listOfAnimationControllerCharater = new List<RuntimeAnimatorController>();
-    
+    bool isPaused;
 
     enum showedMenu
     {
@@ -35,6 +35,7 @@ public class ShopMenuManager : MonoBehaviour {
 
     private int idModel;
 	void Start () {
+        isPaused = false;
         //GameplayDataManager.getInstance().reset();
         idModel = 1;
         showMenu((int)showedMenu.skinMenu);
@@ -172,4 +173,22 @@ public class ShopMenuManager : MonoBehaviour {
     {
         AudioManager.instance.mute();
     }
+
+    public void clearsaveData()
+    {
+        GameplayDataManager.getInstance().clearSaveData();
+        updateModel();
+    }
+
+    private void Update()
+    {
+       
+    }
+
+    public void quitGame()
+    {
+        Application.Quit();
+    }
+
+    
 }

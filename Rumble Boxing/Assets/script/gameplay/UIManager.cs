@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private List<GameObject> listOfSingleQuest = new List<GameObject>();
     [SerializeField] private Slider sliderBarLoading;
     [SerializeField] private Text highscore;
+    [SerializeField] private Text medal;
 
     public void updateRound(int _round)
     {
@@ -69,6 +70,11 @@ public class UIManager : MonoBehaviour {
     public void updateHighscore(int _highscore)
     {
         highscore.text = _highscore.ToString();
+    }
+
+    public void updateMedal(int _medalNew)
+    {
+        medal.text = "+ "+_medalNew.ToString();
     }
 
 

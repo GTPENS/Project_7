@@ -87,6 +87,13 @@ public class GameplayDataManager : MonoBehaviour {
         }
     }
 
+    public void clearSaveData()
+    {
+        SaveGame.Clear();
+        reset();
+        saveGame();
+    }
+
 
     public void loadGame()
     {
@@ -110,7 +117,7 @@ public class GameplayDataManager : MonoBehaviour {
     {
         idEquipedUnit = 1;
         TotalUnits = 3;
-        totalMedals = 1000;
+        totalMedals = 0;
         highScore = 0;
         resetListOfUnlockedUnit();
     }
